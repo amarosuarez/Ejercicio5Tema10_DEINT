@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Ejercicio5Tema10.VM"
+             x:Class="Ejercicio5Tema10.MainPage">
+    <ContentPage.BindingContext>
+        <vm:ListaPersonasVM></vm:ListaPersonasVM>
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="30"
+            Spacing="10">
+            <ListView ItemsSource="{Binding ListaPersonas}" SelectedItem="{Binding PersonaSeleccionada}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <HorizontalStackLayout Padding="10">
+                                <Image Source="{Binding Foto}" WidthRequest="50" HeightRequest="50"/>
+
+                                <VerticalStackLayout Padding="10">
+                                    <Label Text="{Binding Nombre}" />
+                                    <Label Text="{Binding Apellidos}" />
+                                </VerticalStackLayout>
+                            </HorizontalStackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <VerticalStackLayout HorizontalOptions="Start">
+                <Label Text="{Binding PersonaSeleccionada.Nombre}"/>
+                <Label Text="{Binding PersonaSeleccionada.Apellidos}"/>
+                <Label Text="{Binding PersonaSeleccionada.FechaNac}"/>
+                <Label Text="{Binding PersonaSeleccionada.Telefono}"/>
+                <Image Source="{Binding PersonaSeleccionada.Foto}" WidthRequest="175" HeightRequest="175"/>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
