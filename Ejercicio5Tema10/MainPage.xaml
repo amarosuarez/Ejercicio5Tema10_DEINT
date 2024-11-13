@@ -3,12 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Ejercicio5Tema10.VM"
              x:Class="Ejercicio5Tema10.MainPage">
+    
     <ContentPage.BindingContext>
         <vm:ListaPersonasVM></vm:ListaPersonasVM>
     </ContentPage.BindingContext>
 
     <ScrollView>
-        <VerticalStackLayout
+        <HorizontalStackLayout
             Padding="30"
             Spacing="10">
             <ListView ItemsSource="{Binding ListaPersonas}" SelectedItem="{Binding PersonaSeleccionada}">
@@ -35,7 +36,7 @@
                 <Label Text="{Binding PersonaSeleccionada.Telefono}"/>
                 <Image Source="{Binding PersonaSeleccionada.Foto}" WidthRequest="175" HeightRequest="175"/>
             </VerticalStackLayout>
-        </VerticalStackLayout>
+        </HorizontalStackLayout>
     </ScrollView>
 
 </ContentPage>
