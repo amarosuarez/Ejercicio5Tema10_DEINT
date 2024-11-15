@@ -17,7 +17,6 @@
             <Grid BackgroundColor="#FFFFFF"
                   Padding="10"
                   ColumnDefinitions="*, Auto, Auto">
-                <!-- Definir tres columnas -->
 
                 <Entry Placeholder="Buscar..."
                        PlaceholderColor="#888"
