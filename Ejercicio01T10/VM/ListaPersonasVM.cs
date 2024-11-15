@@ -28,7 +28,6 @@ namespace Ejercicio01T10.VM
                 {
                     personaSeleccionada = value;
                     eliminarCommand.RaiseCanExecuteChanged();
-                    NotifyPropertyChanged();
                 }
             }
         }
@@ -147,16 +146,26 @@ namespace Ejercicio01T10.VM
         /// <summary>
         /// Función que elimina a la persona seleccionada de la lista
         /// </summary>
-        private void EliminarPersona()
+        private async void EliminarPersona()
         {
             if (PersonaSeleccionada != null)
             {
-                ListaPersonas.Remove(PersonaSeleccionada);
-                NotifyPropertyChanged("ListaPersonas");
+                // Mostrar el cuadro de diálogo de confirmación
+                bool confirmar = await Application.Current.MainPage.DisplayAlert(
+                    "Confirmar eliminación",
+                    "¿Estás seguro de que deseas eliminar a " + PersonaSeleccionada.Nombre + " " + PersonaSeleccionada.Apellidos + "?",
+                    "Sí", "No");
 
-                // Colocamos persona seleccionada como null ya que la hemos eliminado
-                PersonaSeleccionada = null;
-                NotifyPropertyChanged("PersonaSeleccionada");
+                if (confirmar)
+                {
+                    // Eliminar la persona seleccionada
+                    ListaPersonas.Remove(PersonaSeleccionada);
+                    NotifyPropertyChanged("ListaPersonas");
+
+                    // Colocamos persona seleccionada como null ya que la hemos eliminado
+                    PersonaSeleccionada = null;
+                    NotifyPropertyChanged("PersonaSeleccionada");
+                }
             }
         }
 
