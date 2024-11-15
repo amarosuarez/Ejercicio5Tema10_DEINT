@@ -156,7 +156,7 @@ namespace Ejercicio01T10.VM
                 {
                     // Eliminar la persona seleccionada
                     ListaPersonas.Remove(PersonaSeleccionada);
-                    NotifyPropertyChanged("ListaPersonas");
+                    //NotifyPropertyChanged("ListaPersonas");
 
                     // Colocamos persona seleccionada como null ya que la hemos eliminado
                     PersonaSeleccionada = null;
