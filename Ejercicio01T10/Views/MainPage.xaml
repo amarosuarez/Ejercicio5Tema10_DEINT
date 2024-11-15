@@ -1,7 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Ejercicio01T10.VM"
              x:Class="Ejercicio01T10.MainPage">
+
+    <ContentPage.BindingContext>
+        <vm:ListaPersonasVM></vm:ListaPersonasVM>
+    </ContentPage.BindingContext>
 
     <ScrollView>
         <VerticalStackLayout
@@ -9,30 +14,60 @@
         Spacing="20"
         BackgroundColor="#F5F5F5">
 
-            <HorizontalStackLayout
-            BackgroundColor="#FFFFFF"
-            Padding="10"
-            Spacing="10">
+            <Grid BackgroundColor="#FFFFFF"
+                  Padding="10"
+                  ColumnDefinitions="*, Auto, Auto">
+                <!-- Definir tres columnas -->
 
                 <Entry Placeholder="Buscar..."
-                   PlaceholderColor="#888"
-                   TextColor="#333"
-                   FontSize="Medium"
-                   HorizontalOptions="FillAndExpand"
-                   VerticalOptions="Center" />
+                       PlaceholderColor="#888"
+                       TextColor="#333"
+                       FontSize="Medium"
+                       HorizontalOptions="FillAndExpand"
+                       VerticalOptions="Center"
+                       Text="{Binding Busqueda}" 
+                       Grid.Column="0" />
 
                 <ImageButton Source="lupa.png"
-                         HeightRequest="40"
-                         WidthRequest="40"
-                         BackgroundColor="Transparent"
-                         HorizontalOptions="End"
-                         VerticalOptions="Center" />
+                             HeightRequest="40"
+                             WidthRequest="40"
+                             Margin="20,0,0,0"
+                             BackgroundColor="Transparent"
+                             HorizontalOptions="End"
+                             VerticalOptions="Center"
+                             Command="{Binding FiltrarCommand}"
+                             Grid.Column="1" />
 
-            </HorizontalStackLayout>
+                <ImageButton Source="remove.png"
+                             HeightRequest="40"
+                             WidthRequest="40"
+                             Margin="20,0,0,0"
+                             BackgroundColor="Transparent"
+                             HorizontalOptions="End"
+                             VerticalOptions="Center"
+                             Command="{Binding EliminarCommand}"
+                             Grid.Column="2" />
+
+            </Grid>
+
+            <ListView ItemsSource="{Binding ListaPersonas}" SelectedItem="{Binding PersonaSeleccionada}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <HorizontalStackLayout Padding="10">
+                                <Image Source="{Binding Foto}" WidthRequest="50" HeightRequest="50"/>
+
+                                <VerticalStackLayout Padding="10">
+                                    <Label Text="{Binding Nombre}" />
+                                    <Label Text="{Binding Apellidos}" />
+                                </VerticalStackLayout>
+                            </HorizontalStackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
 
         </VerticalStackLayout>
     </ScrollView>
-
-
 
 </ContentPage>
