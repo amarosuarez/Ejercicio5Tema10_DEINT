@@ -124,7 +124,7 @@ namespace Ejercicio01T10.VM
             if (string.IsNullOrEmpty(Busqueda))
             {
                 sePuedeBuscar = false;
-                ListaPersonas = new ObservableCollection<clsPersona>(ClsListadoBL.listadoPersonas());
+                listaPersonas = new ObservableCollection<clsPersona>(ClsListadoBL.listadoPersonas());
                 NotifyPropertyChanged("ListaPersonas");
             }
 
