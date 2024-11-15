@@ -35,10 +35,6 @@ namespace Ejercicio01T10.VM
         public ObservableCollection<clsPersona> ListaPersonas
         {
             get { return listaPersonas; }
-            set
-            {
-                listaPersonas = value;
-            }
         }
 
         public string Busqueda
@@ -74,7 +70,7 @@ namespace Ejercicio01T10.VM
         public ListaPersonasVM()
         {
             // Inicializar la lista original
-            ListaPersonas = new ObservableCollection<clsPersona>(ClsListadoBL.listadoPersonas());
+            listaPersonas = new ObservableCollection<clsPersona>(ClsListadoBL.listadoPersonas());
 
             // Commands
             filtrarCommand = new DelegateCommand(FiltrarCommand_Executed,

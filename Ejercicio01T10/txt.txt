@@ -1,0 +1,47 @@
+ENT
+	clsPersona:
+		- nombre: string
+		- apellidos: string
+		- fechaNac: DateTime
+		- foto: string
+		- direccion: string
+		- telefono: int
+------------------------------------------------------
+DAL
+	clsListadoDAL:
+		- listaPersonas: List<clsPersona>
+------------------------------------------------------
+BL
+	clsListadoBL:
+		- listaPersonas: List<clsPersona>
+------------------------------------------------------
+UI
+	VM 
+		ListaPersonasVM : INotifyPropertyChanged
+			- personaSeleccionada: clsPersona {get; set;}
+			- listaPersona: ObservableCollection<clsPersona> {get;}
+			- busqueda: string {get; set;}
+			- filtrarCommand: DelegateCommand {get;}
+			- eliminarCommand: DelegateCommand {get;}
+
+			public ListaPersonasVM() {
+				listaPersonas = new ObservableCollection<clsPersona>(ClsListadoBL.listadoPersonas());
+				
+				filtrarCommand = new DelegateCommand(FiltrarCommand_Executed,
+                FiltrarCommand_CanExecute);
+				
+				eliminarCommand = new DelegateCommand(EliminarCommand_Executed,
+                EliminarCommand_CanExecute);
+			}
+
+			void FiltrarCommand_Execute()
+
+			void FilterList()
+
+			bool FiltrarCommand_CanExecute()
+
+			void EliminarCommand_Execute()
+
+			async void EliminarPersona()
+
+			bool EliminarCommand_CanExecute()
