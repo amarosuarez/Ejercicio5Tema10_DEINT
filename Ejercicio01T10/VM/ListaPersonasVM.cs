@@ -12,13 +12,16 @@ namespace Ejercicio01T10.VM
 {
     class ListaPersonasVM : INotifyPropertyChanged
     {
-        #region Propiedades
+        #region Atributos
         private clsPersona personaSeleccionada;
         private ObservableCollection<clsPersona> listaPersonas;
+        private ObservableCollection<clsPersona> listaPersonasFiltrada;
         private string busqueda;
         private DelegateCommand filtrarCommand;
         private DelegateCommand eliminarCommand;
+        #endregion
 
+        #region Propiedades
         public clsPersona PersonaSeleccionada
         {
             get { return personaSeleccionada; }
@@ -32,9 +35,9 @@ namespace Ejercicio01T10.VM
             }
         }
 
-        public ObservableCollection<clsPersona> ListaPersonas
+        public ObservableCollection<clsPersona> ListaPersonasFiltrada
         {
-            get { return listaPersonas; }
+            get { return listaPersonasFiltrada; }
         }
 
         public string Busqueda
@@ -43,12 +46,19 @@ namespace Ejercicio01T10.VM
             set
             {
                 busqueda = value;
+
+                if (string.IsNullOrEmpty(value))
+                {
+                    listaPersonasFiltrada = listaPersonas;
+                    //listaPersonasFiltrada = new ObservableCollection<clsPersona>(listaPersonas);
+                }
+
                 filtrarCommand.RaiseCanExecuteChanged();
+                NotifyPropertyChanged("ListaPersonasFiltrada");
             }
         }
 
         public DelegateCommand FiltrarCommand
-
         {
             get
             {
@@ -57,7 +67,6 @@ namespace Ejercicio01T10.VM
         }
 
         public DelegateCommand EliminarCommand
-
         {
             get
             {
@@ -71,6 +80,7 @@ namespace Ejercicio01T10.VM
         {
             // Inicializar la lista original
             listaPersonas = new ObservableCollection<clsPersona>(ClsListadoBL.listadoPersonas());
+            listaPersonasFiltrada = new ObservableCollection<clsPersona>(listaPersonas);
 
             // Commands
             filtrarCommand = new DelegateCommand(FiltrarCommand_Executed,
@@ -94,21 +104,21 @@ namespace Ejercicio01T10.VM
         /// </summary>
         private void FilterList()
         {
-            var filteredList = ClsListadoBL.listadoPersonas()
-                    .Where(p => p.Nombre.ToLower().Contains(Busqueda.ToLower()) ||
-                                p.Apellidos.ToLower().Contains(Busqueda.ToLower()))
-                    .ToList();
+            // Filtrar la lista según la búsqueda
+            var filteredList = listaPersonas
+                    .Where(p => p.Nombre.ToLower().Contains(busqueda.ToLower()) ||
+                                p.Apellidos.ToLower().Contains(busqueda.ToLower()));
 
-            // Limpiar la lista actual
-            ListaPersonas.Clear();
+            // Limpiar la lista filtrada
+            listaPersonasFiltrada.Clear();
 
             // Añadir solo los elementos filtrados
             foreach (var persona in filteredList)
             {
-                ListaPersonas.Add(persona);
+                listaPersonasFiltrada.Add(persona);
             }
 
-            NotifyPropertyChanged("ListaPersonas");
+            NotifyPropertyChanged("ListaPersonasFiltrada");
         }
 
         /// <summary>
@@ -119,13 +129,10 @@ namespace Ejercicio01T10.VM
         {
             bool sePuedeBuscar = true;
 
-            //Si no hay una persona seleccionada no se puede borrar
-
-            if (string.IsNullOrEmpty(Busqueda))
+            // Si no hay una búsqueda no se puede filtrar
+            if (string.IsNullOrEmpty(busqueda))
             {
                 sePuedeBuscar = false;
-                listaPersonas = new ObservableCollection<clsPersona>(ClsListadoBL.listadoPersonas());
-                NotifyPropertyChanged("ListaPersonas");
             }
 
             return sePuedeBuscar;
@@ -144,37 +151,38 @@ namespace Ejercicio01T10.VM
         /// </summary>
         private async void EliminarPersona()
         {
-            if (PersonaSeleccionada != null)
+            if (personaSeleccionada != null)
             {
                 // Mostrar el cuadro de diálogo de confirmación
                 bool confirmar = await Application.Current.MainPage.DisplayAlert(
                     "Confirmar eliminación",
-                    "¿Estás seguro de que deseas eliminar a " + PersonaSeleccionada.Nombre + " " + PersonaSeleccionada.Apellidos + "?",
+                    "¿Estás seguro de que deseas eliminar a " + personaSeleccionada.Nombre + " " + PersonaSeleccionada.Apellidos + "?",
                     "Sí", "No");
 
                 if (confirmar)
                 {
                     // Eliminar la persona seleccionada
-                    ListaPersonas.Remove(PersonaSeleccionada);
-                    //NotifyPropertyChanged("ListaPersonas");
+                    listaPersonas.Remove(personaSeleccionada);
+
+                    // Volvemos a filtrar para que muestre los cambios
+                    listaPersonasFiltrada.Remove(personaSeleccionada);
 
                     // Colocamos persona seleccionada como null ya que la hemos eliminado
-                    PersonaSeleccionada = null;
+                    personaSeleccionada = null;
                     NotifyPropertyChanged("PersonaSeleccionada");
                 }
             }
         }
 
         /// <summary>
-        /// Función que determina si eliminar command se pude ejecutar o no
+        /// Función que determina si eliminar command se puede ejecutar o no
         /// </summary>
-        /// <returns>Devuelve si eliminar command se pude ejecutar o no</returns>
+        /// <returns>Devuelve si eliminar command se puede ejecutar o no</returns>
         public bool EliminarCommand_CanExecute()
         {
             bool sePuedeEliminar = true;
 
-            //Si no hay una persona seleccionada no se puede borrar
-
+            // Si no hay una persona seleccionada no se puede borrar
             if (personaSeleccionada == null)
             {
                 sePuedeEliminar = false;
